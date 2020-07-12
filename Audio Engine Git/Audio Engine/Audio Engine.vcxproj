@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Maths\WorldMaths.cpp" />
+    <ClCompile Include="src\Objects\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Maths\Bitmaths.h" />
