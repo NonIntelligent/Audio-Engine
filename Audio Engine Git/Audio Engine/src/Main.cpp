@@ -2,10 +2,13 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "Graphics/Shader.h"
 #include "Objects/Player.h"
+#include "ErrorHandling.h"
+
 
 GLFWwindow* window;
-Player player = Player(0.1f, 0.0f, 0.1f);
+Player player;
 bool running = false;
 
 const int VSYNC_OFF = 0;
@@ -18,8 +21,9 @@ bool initGLFW() {
 		return false;
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	window = glfwCreateWindow(1280, 720, "Audio Engine", NULL, NULL);
 	if(!window) {
@@ -55,6 +59,14 @@ bool initALL() {
 		return false;
 	}
 
+	std::cout << glGetString(GL_VERSION) << std::endl;
+
+	player = Player(0.1f, 0.0f, 0.1f);
+
+	ShaderProgramSource sources = Shader::parseShader("res/Shaders/Player.shader");
+
+	player.shader = Shader::createShader(sources.vertexSource, sources.fragmentSource);
+
 	return true;
 }
 
@@ -63,11 +75,47 @@ void update() {
 }
 
 void render(double interpolate) {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.2, 0.2, 0.2, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	player.render();
 
 	glfwSwapBuffers(window);
+}
+
+void codeTest() {
+	Mat4f mat;
+	Mat4f inv;
+	Mat3f mat3f;
+
+	Vec4f test = Vec4f(0.f, 3.f, 4.f, 6.f);
+	Vec4f test2 = Vec4f(9.f, 4.f, 7.f, 2.f);
+	Vec4f test3 = Vec4f(8.f, 1.f, 0.f, 7.f);
+	Vec4f test4 = Vec4f(5.f, 6.f, 3.f, 0.f);
+
+	mat.setRowData(0, &test);
+	mat.setRowData(1, &test2);
+	mat.setRowData(2, &test3);
+	mat.setRowData(3, &test4);
+
+	for(int i = 0; i < 4; i++) {
+		std::cout << mat.matrix[i][0] << "  ";
+		std::cout << mat.matrix[i][1] << "  ";
+		std::cout << mat.matrix[i][2] << "  ";
+		std::cout << mat.matrix[i][3] << "\n";
+	}
+
+	std::cout << "/////////////////////" << std::endl;
+
+	Mat4f::inverse(&inv, &mat);
+
+	for(int i = 0; i < 4; i++) {
+		std::cout << inv.matrix[i][0] << "  ";
+		std::cout << inv.matrix[i][1] << "  ";
+		std::cout << inv.matrix[i][2] << "  ";
+		std::cout << inv.matrix[i][3] << "\n";
+	}
+
 }
 
 int main() {
@@ -82,6 +130,8 @@ int main() {
 	int fps = 0;
 	int ticks = 0;
 	int frames = 0;
+
+	codeTest();
 
 	// returns time in seconds after glfw initialisation
 	double previousTime = glfwGetTime();

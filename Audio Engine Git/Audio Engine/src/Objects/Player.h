@@ -1,15 +1,16 @@
 #pragma once
 #include "Maths/WorldMaths.h"
 #include "GL/glew.h"
+#include "ErrorHandling.h"
 
 class Player {
 public:
 
-	Player() {	};
+	Player();
 
 	Player(float x, float y, float z);
 
-	~Player() {  };
+	~Player();
 
 	void update();
 
@@ -24,8 +25,10 @@ public:
 
 	Vec3f bodySize = Vec3f(0.2f, 0.5f , 0.2f);
 
-	const float speed = 0.2f;
+	float speed = 0.2f;
 	
-	GLuint VBO;
-	GLuint VAO;
+	GLuint shader = 0;
+	GLuint VBO = 0;
+	GLuint VAO = 0;
+	GLuint IBO = 0;
 };
