@@ -154,21 +154,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\Graphics\Camera.cpp" />
     <ClCompile Include="src\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Graphics\Texture.cpp" />
+    <ClCompile Include="src\Graphics\VertexArray.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Maths\WorldMaths.cpp" />
     <ClCompile Include="src\Objects\Player.cpp" />
+    <ClCompile Include="src\Graphics\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ErrorHandling.h" />
+    <ClInclude Include="src\Graphics\IndexBuffer.h" />
+    <ClInclude Include="src\Graphics\Renderer.h" />
+    <ClInclude Include="src\Graphics\Camera.h" />
     <ClInclude Include="src\Graphics\Shader.h" />
+    <ClInclude Include="src\Graphics\Texture.h" />
+    <ClInclude Include="src\Graphics\VertexArray.h" />
+    <ClInclude Include="src\Graphics\VertexBufferLayout.h" />
     <ClInclude Include="src\IO\FileReader.h" />
     <ClInclude Include="src\Maths\Bitmaths.h" />
     <ClInclude Include="src\Maths\WorldMaths.h" />
     <ClInclude Include="src\Objects\Player.h" />
+    <ClInclude Include="src\Graphics\VertexBuffer.h" />
+    <ClInclude Include="src\Vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\Player.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Textures\brickwall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

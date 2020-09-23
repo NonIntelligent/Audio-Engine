@@ -2,6 +2,11 @@
 
 #include <array>
 #include <vector>
+#include <math.h>
+
+const double PI = 3.141592653589793;
+double toRad(double degrees);
+double toDegrees(double radians);
 
 struct Vec3f {
 	float x = 0.0f;
@@ -27,6 +32,9 @@ struct Vec3f {
 
 	static void cross(Vec3f* result, Vec3f* a, Vec3f* b);
 
+	void normalise();
+	void negate();
+
 	float lengthSquare();
 
 
@@ -40,10 +48,10 @@ struct Mat3f {
 
 	~Mat3f() {};
 
-	void setRowData(int index, int* array);
+	void setRowData(int index, float* array);
 	void setRowData(int index, Vec3f* vec);
 
-	void setColData(int index, int* array);
+	void setColData(int index, float* array);
 	void setColData(int index, Vec3f* vec);
 
 	Vec3f getRowAsVec(int index);
@@ -93,6 +101,9 @@ struct Vec4f {
 
 	static void cross(Vec4f* result, Vec4f* a, Vec4f* b);
 
+	void normalise();
+	void negate();
+
 	float lengthSquare();
 
 
@@ -106,11 +117,11 @@ struct Mat4f {
 
 	~Mat4f() {};
 
-	void setRowData(int index, int* array);
+	void setRowData(int index, float* array);
 	void setRowData(int index, Vec4f* vec);
 	void setRowData(int index, Vec3f* vec);
 
-	void setColData(int index, int* array);
+	void setColData(int index, float* array);
 	void setColData(int index, Vec4f* vec);
 	void setColData(int index, Vec3f* vec);
 
@@ -123,6 +134,8 @@ struct Mat4f {
 	void setAsZero();
 	float determinant();
 	void transpose();
+	float* data();
+	float* dataColMaj();
 
 	static void add(Mat4f* result, Mat4f* a, Mat4f* b);
 

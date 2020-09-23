@@ -2,13 +2,22 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+
+#include "Graphics/Renderer.h"
+#include "Graphics/VertexBuffer.h"
+#include "Graphics/IndexBuffer.h"
+#include "Graphics/Camera.h"
 #include "Graphics/Shader.h"
 #include "Objects/Player.h"
-#include "ErrorHandling.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "Vendor/stb_image.h"
+
 
 
 GLFWwindow* window;
-Player player;
+Player* player;
+Camera camera;
 bool running = false;
 
 const int VSYNC_OFF = 0;
@@ -61,16 +70,30 @@ bool initALL() {
 
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
-	player = Player(0.1f, 0.0f, 0.1f);
+	player = new Player(0.1f, 0.0f, 0.1f);
+	player->setupRendering();
 
 	ShaderProgramSource sources = Shader::parseShader("res/Shaders/Player.shader");
 
-	player.shader = Shader::createShader(sources.vertexSource, sources.fragmentSource);
+	player->shader = Shader::createShader(sources.vertexSource, sources.fragmentSource);
 
 	return true;
 }
 
 void update() {
+	const float radius = 50.f;
+	float camX = sin(glfwGetTime()) * radius;
+	float camZ = cos(glfwGetTime()) * radius;
+
+	float r = sin(glfwGetTime());
+	float g = (cos(glfwGetTime()) + 1) * 2;
+	float b = sin(glfwGetTime()) * 2;
+
+	player->colour.x = r;
+	player->colour.y = g;
+	player->colour.z = b;
+
+	//camera.setPos(camX, 0.f, camZ);
 
 }
 
@@ -78,9 +101,45 @@ void render(double interpolate) {
 	glClearColor(0.2, 0.2, 0.2, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	player.render();
+	Mat4f cameraPerspective = camera.perspective();
+	Mat4f cameraLookAt = camera.lookAt();
+
+	player->render(&cameraPerspective, &cameraLookAt);
 
 	glfwSwapBuffers(window);
+}
+
+void processInput(GLFWwindow *window, double frameTime) {
+	float cameraSpeed = 0.1 * frameTime;
+	if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		Vec3f temp;
+		Vec3f::scale(&temp, &camera.target, cameraSpeed);
+		Vec3f::add(&camera.pos, &camera.pos, &temp);
+	} 
+
+	if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		Vec3f temp;
+		Vec3f::scale(&temp, &camera.target, cameraSpeed);
+		Vec3f::sub(&camera.pos, &camera.pos, &temp);
+	} 
+
+	if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		Vec3f temp;
+		Vec3f::cross(&temp, &camera.target, &camera.up);
+		temp.normalise();
+		Vec3f::scale(&temp, &temp, cameraSpeed);
+		Vec3f::sub(&camera.pos, &camera.pos, &temp);
+	}
+
+	if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		Vec3f temp;
+		Vec3f::cross(&temp, &camera.target, &camera.up);
+		temp.normalise();
+		Vec3f::scale(&temp, &temp, cameraSpeed);
+		Vec3f::add(&camera.pos, &camera.pos, &temp);
+	}
+
+
 }
 
 void codeTest() {
@@ -118,6 +177,10 @@ void codeTest() {
 
 }
 
+void deleteHeapObjects() {
+	delete(player);
+}
+
 int main() {
 
 	if(initALL())
@@ -146,6 +209,8 @@ int main() {
 
 		accumulator += frameTime;
 
+		processInput(window, frameTime);
+
 		while(accumulator >= SEC_PER_UPDATE) {
 		update();
 		ticks++;
@@ -162,13 +227,15 @@ int main() {
 			ups = ticks;
 			fps = frames;
 			std::cout << "ups: " << ups << " fps: " << fps << std::endl;
+			std::cout << "Camera Pos " << camera.pos.x << ", " << camera.pos.y << ", " << camera.pos.z << std::endl;
 			ticks = 0;
 			frames = 0;
 			t -= 1;
 		}
 
 	}
-
+	
+	deleteHeapObjects();
 	glfwTerminate();
 
 	return 0;

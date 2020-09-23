@@ -1,67 +1,66 @@
 #include "Player.h"
 
 Player::Player() {
-
+	this->pos.set(0, 0, 0);
 }
 
 Player::Player(float x, float y, float z) {
 	this->pos.set(x, y, z);
-	glGenBuffers(1, &VBO);
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &IBO);
 }
 
 Player::~Player() {
+	vb->unBind();
+	delete(vb);
+	ib->unBind();
+	delete(ib);
+	va->unBind();
+	delete(va);
 }
 
 void Player::update() {
 	Vec3f::add(&pos, &pos, &vel);
 }
 
-void Player::render() {
-	glUseProgram(shader);
-
-	float cuboidpos[24] = {
-		0.f, 0.f, 0.f,// index 0
-		0.2f, 0.f, 0.f,
-		0.2f, 0.f, -0.2f,
-		0.f, 0.f, -0.2f, // 3
-
-		0.f, 0.6f, 0.f, // 4
-		0.2f, 0.6f, 0.f,
-		0.2f, 0.6f, -0.2f,
-		0.f, 0.6f, -0.2f // 7
-	};
-
-	GLuint indices[] = {
-		0, 1, 2, // Bottom face
-		2, 3, 0,
-		4, 5, 6, // Top face
-		6, 7, 4,
-		0, 1, 5, // Front face
-		5, 4, 0,
-		1, 2, 6, // Right side
-		6, 5, 1,
-		3, 0, 4, // Left side
-		4, 7, 3,
-		3, 2, 6, // Back side
-		6, 7, 3
-	};
+void Player::setupRendering() {
+	va = new VertexArray();
 
 	//Use this buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindVertexArray(VAO);
-	// Specify the data to use and its layout
-	glBufferData(GL_ARRAY_BUFFER, 8 * 3 * sizeof(float), cuboidpos, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-	glEnableVertexAttribArray(0);
+	// Specify the data to use and its layout (x = vertecies * no. of components)
+	vb = new VertexBuffer(cuboidVertexs, 4 * 3 * sizeof(float));
 
-	// Index Buffer data
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(GLuint), indices, GL_STATIC_DRAW);
+	// Bind attributes to vertex buffer and array
+	VertexBufferLayout layout;
+	layout.push<float>(3);
+	va->addBuffer((*vb), layout);
+
+	ib = new IndexBuffer(indices, 6);
+
+	setup = true;
+}
+
+void Player::render(Mat4f* perspective, Mat4f* LookAt) {
+
+	if(!setup) return;
+
+	glUseProgram(shader);
+
+	// Use vertex array object that's already been setup
+	va->bind();
+
+	u_colourLoc = glGetUniformLocation(shader, "u_Colour");
+	glUniform4f(u_colourLoc, colour.x, colour.y, colour.z, colour.w);
+	Mat4f modelIdentity;
+	modelIdentity.setAsIdentity();
+
+	u_modelMatLocation = glGetUniformLocation(shader, "u_model");
+	u_prjMatLocation = glGetUniformLocation(shader, "u_projection");
+	u_viewMatLocation = glGetUniformLocation(shader, "u_view");
+	glUniformMatrix4fv(u_modelMatLocation, 1, GL_FALSE, modelIdentity.data());
+	glUniformMatrix4fv(u_prjMatLocation, 1, GL_FALSE, perspective->data());
+	glUniformMatrix4fv(u_viewMatLocation, 1, GL_FALSE, LookAt->data());
 
 	// Draw array with index buffer
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 
 }

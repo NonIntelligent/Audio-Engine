@@ -1,5 +1,13 @@
 #include "WorldMaths.h"
 
+double toRad(double degrees) {
+	return (degrees * PI) / 180;
+}
+
+double toDegrees(double radians) {
+	return (radians * 180) / PI;
+}
+
 Vec3f::Vec3f(float x, float y, float z) {
 	this->x = x;
 	this->y = y;
@@ -47,6 +55,24 @@ void Vec3f::cross(Vec3f * result, Vec3f * a, Vec3f * b) {
 
 }
 
+void Vec3f::normalise() {
+	float magnitude = lengthSquare();
+
+	if(magnitude == 0) return;
+
+	magnitude = sqrtf(magnitude);
+
+	x = x / magnitude;
+	y = y / magnitude;
+	z = z / magnitude;
+}
+
+void Vec3f::negate() {
+	this->x *= -1;
+	this->y *= -1;
+	this->z *= -1;
+}
+
 float Vec3f::lengthSquare() {
 	return x*x + y*y + z*z;
 }
@@ -66,7 +92,7 @@ Mat3f::Mat3f(const Mat3f* mat) {
 	matrix[2][2] = mat->matrix[2][2];
 }
 
-void Mat3f::setRowData(int index, int * array) {
+void Mat3f::setRowData(int index, float * array) {
 	matrix[index][0] = array[0];
 	matrix[index][1] = array[1];
 	matrix[index][2] = array[2];
@@ -78,7 +104,7 @@ void Mat3f::setRowData(int index, Vec3f * vec) {
 	matrix[index][2] = vec->z;
 }
 
-void Mat3f::setColData(int index, int * array) {
+void Mat3f::setColData(int index, float * array) {
 	matrix[0][index] = array[0];
 	matrix[1][index] = array[1];
 	matrix[2][index] = array[2];
@@ -155,9 +181,9 @@ void Mat3f::add(Mat3f* result, Mat3f* a, Mat3f* b) {
 	result->matrix[1][1] = a->matrix[1][1] + b->matrix[1][1];
 	result->matrix[1][2] = a->matrix[1][2] + b->matrix[1][2];
 
-	result->matrix[2][0] = a->matrix[1][0] + b->matrix[2][0];
-	result->matrix[2][1] = a->matrix[1][1] + b->matrix[2][1];
-	result->matrix[2][2] = a->matrix[1][2] + b->matrix[2][2];
+	result->matrix[2][0] = a->matrix[2][0] + b->matrix[2][0];
+	result->matrix[2][1] = a->matrix[2][1] + b->matrix[2][1];
+	result->matrix[2][2] = a->matrix[2][2] + b->matrix[2][2];
 }
 
 void Mat3f::sub(Mat3f* result, Mat3f* a, Mat3f* b) {
@@ -169,9 +195,9 @@ void Mat3f::sub(Mat3f* result, Mat3f* a, Mat3f* b) {
 	result->matrix[1][1] = a->matrix[1][1] - b->matrix[1][1];
 	result->matrix[1][2] = a->matrix[1][2] - b->matrix[1][2];
 
-	result->matrix[2][0] = a->matrix[1][0] - b->matrix[2][0];
-	result->matrix[2][1] = a->matrix[1][1] - b->matrix[2][1];
-	result->matrix[2][2] = a->matrix[1][2] - b->matrix[2][2];
+	result->matrix[2][0] = a->matrix[2][0] - b->matrix[2][0];
+	result->matrix[2][1] = a->matrix[2][1] - b->matrix[2][1];
+	result->matrix[2][2] = a->matrix[2][2] - b->matrix[2][2];
 }
 
 void Mat3f::scale(Mat3f* result, Mat3f* a, float b) {
@@ -271,6 +297,26 @@ float Vec4f::dot(Vec4f * a, Vec4f * b) {
 	return a->x * b->x + a->y * b->y + a->z * b->z + a->w * b->w;
 }
 
+void Vec4f::normalise() {
+	float magnitude = lengthSquare();
+
+	if(magnitude == 0) return;
+
+	magnitude = sqrtf(magnitude);
+
+	x = x / magnitude;
+	y = y / magnitude;
+	z = z / magnitude;
+	w = w / magnitude;
+}
+
+void Vec4f::negate() {
+	this->x *= -1;
+	this->y *= -1;
+	this->z *= -1;
+	this->w *= -1;
+}
+
 float Vec4f::lengthSquare() {
 	return x*x + y*y + z*z + w*w;
 }
@@ -299,7 +345,7 @@ Mat4f::Mat4f(const Mat4f * mat) {
 	matrix[3][3] = mat->matrix[3][3];
 }
 
-void Mat4f::setRowData(int index, int * array) {
+void Mat4f::setRowData(int index, float * array) {
 	matrix[index][0] = array[0];
 	matrix[index][1] = array[1];
 	matrix[index][2] = array[2];
@@ -320,7 +366,7 @@ void Mat4f::setRowData(int index, Vec3f * vec) {
 	matrix[index][3] = 0;
 }
 
-void Mat4f::setColData(int index, int * array) {
+void Mat4f::setColData(int index, float * array) {
 	matrix[0][index] = array[0];
 	matrix[1][index] = array[1];
 	matrix[2][index] = array[2];
@@ -351,7 +397,7 @@ Vec4f Mat4f::getColAsVec(int index) {
 
 Mat3f Mat4f::get3x3Matrix(int row, int col) {
 	Mat3f mat;
-	int arr[3];
+	float arr[3];
 	int count = 0;
 	int row3x3 = 0;
 
@@ -456,16 +502,102 @@ void Mat4f::transpose() {
 	matrix[3][2] = temp;
 }
 
+float* Mat4f::data() {
+	float singleMat[16];
+
+	for(int i = 0; i < 16; i++) {
+		singleMat[i] = matrix[i / 4][i % 4];
+	}
+
+	return singleMat;
+}
+
+float* Mat4f::dataColMaj() {
+	float singleMat[16];
+
+	for(int i = 0; i < 16; i++) {
+		singleMat[i] = matrix[i % 4][i / 4];
+	}
+
+	return singleMat;
+}
+
 void Mat4f::add(Mat4f * result, Mat4f * a, Mat4f * b) {
+	result->matrix[0][0] = a->matrix[0][0] + b->matrix[0][0];
+	result->matrix[0][1] = a->matrix[0][1] + b->matrix[0][1];
+	result->matrix[0][2] = a->matrix[0][2] + b->matrix[0][2];
+	result->matrix[0][3] = a->matrix[0][3] + b->matrix[0][3];
+
+	result->matrix[1][0] = a->matrix[1][0] + b->matrix[1][0];
+	result->matrix[1][1] = a->matrix[1][1] + b->matrix[1][1];
+	result->matrix[1][2] = a->matrix[1][2] + b->matrix[1][2];
+	result->matrix[1][3] = a->matrix[1][3] + b->matrix[1][3];
+
+	result->matrix[2][0] = a->matrix[2][0] + b->matrix[2][0];
+	result->matrix[2][1] = a->matrix[2][1] + b->matrix[2][1];
+	result->matrix[2][2] = a->matrix[2][2] + b->matrix[2][2];
+	result->matrix[2][3] = a->matrix[2][3] + b->matrix[2][3];
+
+	result->matrix[3][0] = a->matrix[3][0] + b->matrix[3][0];
+	result->matrix[3][1] = a->matrix[3][1] + b->matrix[3][1];
+	result->matrix[3][2] = a->matrix[3][2] + b->matrix[3][2];
+	result->matrix[3][3] = a->matrix[3][3] + b->matrix[3][3];
+
 }
 
 void Mat4f::sub(Mat4f * result, Mat4f * a, Mat4f * b) {
+	result->matrix[0][0] = a->matrix[0][0] - b->matrix[0][0];
+	result->matrix[0][1] = a->matrix[0][1] - b->matrix[0][1];
+	result->matrix[0][2] = a->matrix[0][2] - b->matrix[0][2];
+	result->matrix[0][3] = a->matrix[0][3] - b->matrix[0][3];
+
+	result->matrix[1][0] = a->matrix[1][0] - b->matrix[1][0];
+	result->matrix[1][1] = a->matrix[1][1] - b->matrix[1][1];
+	result->matrix[1][2] = a->matrix[1][2] - b->matrix[1][2];
+	result->matrix[1][3] = a->matrix[1][3] - b->matrix[1][3];
+
+	result->matrix[2][0] = a->matrix[2][0] - b->matrix[2][0];
+	result->matrix[2][1] = a->matrix[2][1] - b->matrix[2][1];
+	result->matrix[2][2] = a->matrix[2][2] - b->matrix[2][2];
+	result->matrix[2][3] = a->matrix[2][3] - b->matrix[2][3];
+
+	result->matrix[3][0] = a->matrix[3][0] - b->matrix[3][0];
+	result->matrix[3][1] = a->matrix[3][1] - b->matrix[3][1];
+	result->matrix[3][2] = a->matrix[3][2] - b->matrix[3][2];
+	result->matrix[3][3] = a->matrix[3][3] - b->matrix[3][3];
 }
 
 void Mat4f::scale(Mat4f * result, Mat4f * a, float b) {
+	result->matrix[0][0] = a->matrix[0][0] * b;
+	result->matrix[0][1] = a->matrix[0][1] * b;
+	result->matrix[0][2] = a->matrix[0][2] * b;
+	result->matrix[0][3] = a->matrix[0][3] * b;
+
+	result->matrix[1][0] = a->matrix[1][0] * b;
+	result->matrix[1][1] = a->matrix[1][1] * b;
+	result->matrix[1][2] = a->matrix[1][2] * b;
+	result->matrix[1][3] = a->matrix[1][3] * b;
+
+	result->matrix[2][0] = a->matrix[2][0] * b;
+	result->matrix[2][1] = a->matrix[2][1] * b;
+	result->matrix[2][2] = a->matrix[2][2] * b;
+	result->matrix[2][3] = a->matrix[2][3] * b;
+
+	result->matrix[3][0] = a->matrix[3][0] * b;
+	result->matrix[3][1] = a->matrix[3][1] * b;
+	result->matrix[3][2] = a->matrix[3][2] * b;
+	result->matrix[3][3] = a->matrix[3][3] * b;
 }
 
 void Mat4f::mult(Mat4f * result, Mat4f * a, Mat4f * b) {
+	for(int i = 0; i < 4; i++) {
+		for(int j = 0; j < 4; j++) {
+			result->matrix[i][j] = a->matrix[i][0] * b->matrix[0][j]
+				+ a->matrix[i][1] * b->matrix[1][j]
+				+ a->matrix[i][2] * b->matrix[2][j]
+				+ a->matrix[i][3] * b->matrix[3][j];
+		}
+	}
 }
 
 bool Mat4f::inverse(Mat4f* result, Mat4f* a) {
@@ -596,3 +728,4 @@ bool Mat4f::inverse(Mat4f* result, Mat4f* a) {
 
 	return true;
 }
+
