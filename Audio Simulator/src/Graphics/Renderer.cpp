@@ -250,15 +250,25 @@ void Renderer::updateCameraUniform() {
 	// Fill the buffer data
 	double data[16];
 	camPerspective.data(data);
+	float convert[16];
+
+	for(int i = 0; i < 16; i++) {
+		convert[i] = (float)data[i];
+	}
+
 	GLCall(glBindBuffer(GL_UNIFORM_BUFFER, u_CamRendererID));
 
-	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(double), data));
+	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), convert));
 	camLookAt.data(data);
-	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(double), 16 * sizeof(double), data));
+	for(int i = 0; i < 16; i++) {
+		convert[i] = (float)data[i];
+	}
 
-	double pos[]{camPos.x, camPos.y, camPos.z};
+	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(float), 16 * sizeof(float), convert));
 
-	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 32 * sizeof(double), 3 * sizeof(double), pos));
+	float pos[]{camPos.x, camPos.y, camPos.z};
+
+	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 32 * sizeof(float), 3 * sizeof(float), pos));
 
 	GLCall(glBindBuffer(GL_UNIFORM_BUFFER, 0));
 }
@@ -446,11 +456,11 @@ void Renderer::setupGlobalUniforms() {
 	GLCall(glGenBuffers(1, &u_CamRendererID));
 	GLCall(glBindBuffer(GL_UNIFORM_BUFFER, u_CamRendererID));
 	// 2 matrices with 16 doubles in each + 3 doubles for position.
-	GLCall(glBufferData(GL_UNIFORM_BUFFER, (2 * 16 + 3) * sizeof(double), NULL, GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_UNIFORM_BUFFER, (2 * 16 + 3) * sizeof(float), NULL, GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_UNIFORM_BUFFER, 0));
 
 	// Bind uniform buffer to a binding point 0, with the buffer object at offset 0 of size.
-	GLCall(glBindBufferRange(GL_UNIFORM_BUFFER, 0, u_CamRendererID, 0, (2 * 16 + 3) * sizeof(double)));
+	GLCall(glBindBufferRange(GL_UNIFORM_BUFFER, 0, u_CamRendererID, 0, (2 * 16 + 3) * sizeof(float)));
 
 	updateCameraUniform();
 }

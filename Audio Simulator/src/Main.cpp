@@ -120,8 +120,6 @@ void render(double interpolate) {
 		renderer->draw(model, model->shaderName);
 	}
 
-	//renderer.draw((*player->va), (*player->ib), (*player->shader));
-
 	glfwSwapBuffers(window);
 }
 

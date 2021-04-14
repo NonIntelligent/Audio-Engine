@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.1169
+VisualStudioVersion = 15.0.28307.1401
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Audio Engine", "Audio Engine\Audio Engine.vcxproj", "{30D536D3-431E-4993-B022-C292F58D0FB9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Audio Simulator", "Audio Engine.vcxproj", "{30D536D3-431E-4993-B022-C292F58D0FB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {CA6186F9-4420-4355-ABC4-12568187EC0E}
+		SolutionGuid = {113A88C9-E31C-43B0-90D1-00CC0F7A75B7}
 	EndGlobalSection
 EndGlobal

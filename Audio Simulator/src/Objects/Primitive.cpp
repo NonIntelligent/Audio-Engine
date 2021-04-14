@@ -48,6 +48,7 @@ void Cube::setupRendering() {
 Cube::Cube(Vec3d pos) {
 	position = pos;
 	colour.set(0.8, 0.0, 0.6, 1.0);
+	scale.set(5.0, 5.0, 5.0);
 }
 
 void Cube::init() {
