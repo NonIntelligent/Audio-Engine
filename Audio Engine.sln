@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1500
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulator", "Simulator\Audio Engine.vcxproj", "{30D536D3-431E-4993-B022-C292F58D0FB9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C540A9B3-ACB2-4D06-9ED1-43425B6405C1} = {C540A9B3-ACB2-4D06-9ED1-43425B6405C1}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioWorks", "AudioWorksLib\AudioWorksLib.vcxproj", "{C540A9B3-ACB2-4D06-9ED1-43425B6405C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30D536D3-431E-4993-B022-C292F58D0FB9}.Debug|x64.ActiveCfg = Debug|x64
+		{30D536D3-431E-4993-B022-C292F58D0FB9}.Debug|x64.Build.0 = Debug|x64
+		{30D536D3-431E-4993-B022-C292F58D0FB9}.Debug|x86.ActiveCfg = Debug|x64
+		{30D536D3-431E-4993-B022-C292F58D0FB9}.Debug|x86.Build.0 = Debug|x64
+		{30D536D3-431E-4993-B022-C292F58D0FB9}.Release|x64.ActiveCfg = Debug|x64
+		{30D536D3-431E-4993-B022-C292F58D0FB9}.Release|x64.Build.0 = Debug|x64
+		{30D536D3-431E-4993-B022-C292F58D0FB9}.Release|x86.ActiveCfg = Debug|x64
+		{30D536D3-431E-4993-B022-C292F58D0FB9}.Release|x86.Build.0 = Debug|x64
+		{C540A9B3-ACB2-4D06-9ED1-43425B6405C1}.Debug|x64.ActiveCfg = Debug|x64
+		{C540A9B3-ACB2-4D06-9ED1-43425B6405C1}.Debug|x64.Build.0 = Debug|x64
+		{C540A9B3-ACB2-4D06-9ED1-43425B6405C1}.Debug|x86.ActiveCfg = Debug|x64
+		{C540A9B3-ACB2-4D06-9ED1-43425B6405C1}.Debug|x86.Build.0 = Debug|x64
+		{C540A9B3-ACB2-4D06-9ED1-43425B6405C1}.Release|x64.ActiveCfg = Debug|x64
+		{C540A9B3-ACB2-4D06-9ED1-43425B6405C1}.Release|x64.Build.0 = Debug|x64
+		{C540A9B3-ACB2-4D06-9ED1-43425B6405C1}.Release|x86.ActiveCfg = Debug|x64
+		{C540A9B3-ACB2-4D06-9ED1-43425B6405C1}.Release|x86.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F9052865-192C-4778-BE71-A04B09A544B6}
+	EndGlobalSection
+EndGlobal

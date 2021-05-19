@@ -135,7 +135,7 @@ public:
 };
 
 struct Vertex {
-	Vec3d position;
-	Vec3d normal;
-	Vec3d texCoord;
+	Vec3f position;
+	Vec3f normal;
+	Vec3f texCoord;
 };

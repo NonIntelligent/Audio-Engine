@@ -67,7 +67,7 @@ protected:
 public:
 
 	Cube() {};
-	Cube(Vec3d pos);
+	Cube(Vec3f pos);
 
 	void init();
 	void update(double dt);

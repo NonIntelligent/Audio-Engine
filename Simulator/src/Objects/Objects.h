@@ -1,8 +1,15 @@
 #pragma once
 
+#include "Components.h"
 #include "Graphics/Shader.h"
 #include "Graphics/VertexObjects.h"
 #include "Maths/WorldMaths.h"
+
+struct Entity {
+	int entityMask;
+
+	std::vector<Component*> components;
+};
 
 // Generic object class for all objects
 class GameObject {
@@ -11,9 +18,9 @@ private:
 	unsigned int objectID = 0;
 
 public:
-	Vec3d position;
-	Vec3d rotationAngles;
-	Vec3d scale{1.0, 1.0, 1.0};
+	Vec3f position;
+	Vec3f rotationAngles;
+	Vec3f scale{1.0, 1.0, 1.0};
 
 	bool usePhysics = false;
 public:
@@ -52,8 +59,8 @@ public:
 	std::string shaderName;
 	std::vector<ShaderUniform> uniforms;
 
-	Vec4d colour;
-	Mat4d modelMatrix;
+	Vec4f colour;
+	Mat4f modelMatrix;
 
 public:
 	Model();

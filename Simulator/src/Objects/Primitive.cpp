@@ -23,7 +23,7 @@ void Cube::setupRendering() {
 
 	shaderName = "Player";
 
-	Vec3d temp = Vec3d(1.0, 1.0, 1.0);
+	Vec3f temp = Vec3f(1.f, 1.f, 1.f);
 
 	ShaderUniform u_Colour;
 	u_Colour.name = "u_Colour";
@@ -45,10 +45,10 @@ void Cube::setupRendering() {
 	uniforms.push_back(model);
 }
 
-Cube::Cube(Vec3d pos) {
+Cube::Cube(Vec3f pos) {
 	position = pos;
-	colour.set(0.8, 0.0, 0.6, 1.0);
-	scale.set(5.0, 5.0, 5.0);
+	colour.set(0.8f, 0.f, 0.6f, 1.f);
+	scale.set(1.f, 1.f, 1.f);
 }
 
 void Cube::init() {
@@ -60,9 +60,9 @@ void Cube::init() {
 void Cube::update(double dt) {
 
 	// Scale, then rotate and finally translate
-	Mat4d::scaleVec(modelMatrix, scale);
-	Mat4d::rotate(modelMatrix, {1.0, 1.0, 1.0}, rotationAngles);
-	Mat4d::translate(modelMatrix, position);
+	Mat4f::scaleVec(modelMatrix, scale);
+	Mat4f::rotate(modelMatrix, Vec3f(1.f, 1.f, 1.f), rotationAngles);
+	Mat4f::translate(modelMatrix, position);
 
 	// updates uniforms
 	uniforms.at(0).dataMatrix.setRowData(0, colour);

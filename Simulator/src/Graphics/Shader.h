@@ -21,7 +21,7 @@ enum class UniformType {
 struct ShaderUniform {
 	std::string name = "setup";
 	std::string resourceName = "setup";
-	Mat4d dataMatrix;
+	Mat4f dataMatrix;
 
 	UniformType type = UniformType::NONE;
 };
@@ -69,9 +69,9 @@ public:
 	// set uniforms
 	void setUniform1i(const std::string& name, int value);
 	void setUniform1f(const std::string & name, float value);
-	void setUniform3f(const std::string & name, Vec3d floats);
-	void setUniform4f(const std::string& name, Vec4d floats);
-	void setUniformMatrix4fv(const std::string& name, GLsizei count, GLboolean transpose, Mat4d matrix);
+	void setUniform3f(const std::string & name, Vec3f floats);
+	void setUniform4f(const std::string& name, Vec4f floats);
+	void setUniformMatrix4fv(const std::string& name, GLsizei count, GLboolean transpose, Mat4f matrix);
 
 	void setUniformBlock(const std::string &blockName, GLuint blockBindingPt);
 

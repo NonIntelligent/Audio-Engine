@@ -28,6 +28,7 @@ x64/
 x86/
 bld/
 [Bb]in/
+bin-int/
 [Oo]bj/
 [Ll]og/
 

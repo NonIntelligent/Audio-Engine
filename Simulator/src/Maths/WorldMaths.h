@@ -12,36 +12,38 @@ template<typename T> int getSign(T val) {
 	return (T(0) < val) - (val < T(0));
 };
 
-struct Vec3d {
-	double x = 0.0;
-	double y = 0.0;
-	double z = 0.0;
+struct Vec3f {
+	float x = 0.0f;
+	float y = 0.0f;
+	float z = 0.0f;
 
-	Vec3d() {
+	Vec3f() {
 	};
 
-	Vec3d(double x, double y, double z) : x(x), y(y), z(z) {
+	Vec3f(float x, float y, float z);
+
+	~Vec3f() {
 	};
 
-	void set(double x, double y, double z);
+	void set(float x, float y, float z);
 
 	// Adds the components of a and b then stores the value in result.
-	static void add(Vec3d &result, const Vec3d &a, const Vec3d &b);
+	static void add(Vec3f& result, const Vec3f& a, const Vec3f& b);
 
 	// Subtracts the components of a and b then stores the value in result.
-	static void sub(Vec3d &result, const Vec3d &a, const Vec3d &b);
+	static void sub(Vec3f& result, const Vec3f& a, const Vec3f& b);
 
 	// Multiplies each component of a by k then stores each value in result.
-	static void scale(Vec3d &result, const Vec3d &a, double k);
+	static void scale(Vec3f& result, const Vec3f& a, float k);
 
 	// Adds each component of a * k to result.
-	static void increment(Vec3d &result, const Vec3d &a, double k);
+	static void increment(Vec3f& result, const Vec3f& a, float k);
 
 	// Computes the dot product of a and b.
-	static float dot(const Vec3d &a, const Vec3d &b);
+	static float dot(const Vec3f& a, const Vec3f& b);
 
 	// Computes the cross product of a and b and replaces result.
-	static void cross(Vec3d &result, const Vec3d &a, const Vec3d &b);
+	static void cross(Vec3f& result, const Vec3f& a, const Vec3f& b);
 
 	// Normalises the vector.
 	void normalise();
@@ -52,43 +54,45 @@ struct Vec3d {
 	// Provides the magnitude of the vector squared.
 	float lengthSquare() const;
 
-	// Is each component equivalent.
-	bool compare(Vec3d &a) const;
+	bool compare(Vec3f& a) const;
 
 };
 
-struct Mat3d {
-	double matrix[3][3];
+struct Mat3f {
+	float matrix[3][3];
 
-	Mat3d() {
+	Mat3f() {
 		setAsIdentity();
+	};
+
+	~Mat3f() {
 	};
 
 	/*
 	Replace the data of the matrix at the specified row given an array.
 	@param index The row index to replace (0-3)
 	*/
-	void setRowData(int index, const double* array);
+	void setRowData(int index, float* array);
 	/* Replace entire row data given a vector.
 	@overload
 	*/
-	void setRowData(int index, const Vec3d &vec);
+	void setRowData(int index, Vec3f& vec);
 
 	/*
 	Replace the data of the matrix at the specified column given an array.
 	@param index The column index to replace (0-3)
 	*/
-	void setColData(int index, const double* array);
+	void setColData(int index, float* array);
 	/* Replace entire column data given a vector.
 	@overload
 	*/
-	void setColData(int index, const Vec3d &vec);
+	void setColData(int index, Vec3f& vec);
 
 	// Returns the entire row as a vector.
-	Vec3d getRowAsVec(int index) const;
+	Vec3f getRowAsVec(int index) const;
 
 	// Returns the entire column as a vector.
-	Vec3d getColAsVec(int index) const;
+	Vec3f getColAsVec(int index) const;
 
 	// Set matrix as identity.
 	void setAsIdentity();
@@ -103,60 +107,63 @@ struct Mat3d {
 	void transpose();
 
 	// Add each corresponding value of matrix a with b and store in result.
-	static void add(Mat3d &result, const Mat3d &a, const Mat3d &b);
+	static void add(Mat3f& result, const Mat3f& a, const Mat3f& b);
 
 	// Subtract each corresponding value of matrix a with b and store in result.
-	static void sub(Mat3d &result, Mat3d &a, Mat3d &b);
+	static void sub(Mat3f& result, const Mat3f& a, const Mat3f& b);
 
 	// Scale each value in matrix a by b and store in result.
-	static void scale(Mat3d &result, const Mat3d &a, float b);
+	static void scale(Mat3f& result, const Mat3f& a, float b);
 
 	// Multiply matrix a and b in the order (a * b) and store in result.
 	// Result cannot be the same as input b.
-	static void mult(Mat3d &result, const Mat3d &a, const Mat3d &b);
+	static void mult(Mat3f& result, const Mat3f& a, const Mat3f& b);
 
 	// Multiply matrix a and vector b in the order (a * b) and store in result.
 	// Result cannot be the same as input b.
-	static void mult(Vec3d &result, const Mat3d &a, const Vec3d &b);
+	static void mult(Vec3f& result, const Mat3f& a, const Vec3f& b);
 
 	// Calculate the inverse of matrix a and stores in result.
-	static bool inverse(Mat3d &result, const Mat3d &a);
+	static bool inverse(Mat3f& result, const Mat3f& a);
 
 	// Creates a rotation matrix and multiplies as (rotation * result).
-	static void rotate(Mat3d &result, const Vec3d &axis, double angle);
+	static void rotate(Mat3f& result, const Vec3f& axis, float angle);
 
 	// Creates a rotation matrix and multiplies as (rotation * result).
-	static void rotate(Mat3d &result, const Vec3d &axis, const Vec3d &angles);
+	static void rotate(Mat3f& result, const Vec3f& axis, const Vec3f& angles);
 
 };
 
-struct Vec4d {
-	double x = 0.f;
-	double y = 0.f;
-	double z = 0.f;
-	double w = 1.f;
+struct Vec4f {
+	float x = 0.f;
+	float y = 0.f;
+	float z = 0.f;
+	float w = 1.f;
 
-	Vec4d() {
+	Vec4f() {
 	};
 
-	Vec4d(double x, double y, double z, double w) : x(x), y(y), z(z), w(w) {};
+	Vec4f(float x, float y, float z, float w);
 
-	void set(double x, double y, double z, double w);
+	~Vec4f() {
+	};
+
+	void set(float x, float y, float z, float w);
 
 	// Adds the components of a and b then stores the value in result.
-	static void add(Vec4d &result, const Vec4d &a, const Vec4d &b);
+	static void add(Vec4f& result, const Vec4f& a, const Vec4f& b);
 
 	// Subtracts the components of a and b then stores the value in result.
-	static void sub(Vec4d &result, const Vec4d &a, const Vec4d &b);
+	static void sub(Vec4f& result, const Vec4f& a, const Vec4f& b);
 
 	// Multiplies each component of a by k then stores each value in result.
-	static void scale(Vec4d &result, const Vec4d &a, float k);
+	static void scale(Vec4f& result, const Vec4f& a, float k);
 
 	// Adds each component of a * k to result.
-	static void increment(Vec4d &result, const Vec4d &a, float k);
+	static void increment(Vec4f& result, const Vec4f& a, float k);
 
 	// Computes the dot product of a and b.
-	static float dot(const Vec4d &a, const Vec4d &b);
+	static float dot(const Vec4f& a, const Vec4f& b);
 
 	// Normalises the vector.
 	void normalise();
@@ -168,57 +175,60 @@ struct Vec4d {
 	float lengthSquare() const;
 
 	// Compares the values between both vectors for equality
-	bool compare(const Vec4d &a) const;
+	bool compare(Vec4f& a) const;
 };
 
-struct Mat4d {
-	double matrix[4][4];
+struct Mat4f {
+	float matrix[4][4];
 
-	Mat4d() {
+	Mat4f() {
 		setAsIdentity();
+	};
+
+	~Mat4f() {
 	};
 
 	/*
 	Replace the data of the matrix at the specified row given an array.
 	@param index The row index to replace (0-3)
 	*/
-	void setRowData(int index, const double* array);
+	void setRowData(int index, float* array);
 	/* Replace entire row data given a vector.
 	@overload
 	*/
-	void setRowData(int index, const Vec4d &vec);
+	void setRowData(int index, const Vec4f& vec);
 	/* Replace the first 3 values in the row given a vector.
 	@overload
 	*/
-	void setRowData(int index, const Vec3d &vec);
+	void setRowData(int index, const Vec3f& vec);
 
 	/*
 	Replace the data of the matrix at the specified column given an array.
 	@param index The column index to replace (0-3)
 	*/
-	void setColData(int index, const double* array);
+	void setColData(int index, float* array);
 	/* Replace entire column data given a vector.
 	@overload
 	*/
-	void setColData(int index, const Vec4d &vec);
+	void setColData(int index, const Vec4f& vec);
 	/* Replace the first 3 column values given a vector.
 	@overload
 	*/
-	void setColData(int index, const Vec3d &vec);
+	void setColData(int index, const Vec3f& vec);
 
 	// Returns the first 3 components as row vector.
-	Vec3d getRowAsVec3(int index) const;
+	Vec3f getRowAsVec3(int index) const;
 
 	// Returns the entire row as a vector.
-	Vec4d getRowAsVec4(int index) const;
+	Vec4f getRowAsVec4(int index) const;
 
 	// Returns the first 3 components as a column vector.
-	Vec3d getColAsVec3(int index) const;
+	Vec3f getColAsVec3(int index) const;
 	// Returns the entire column as a vector.
-	Vec4d getColAsVec4(int index) const;
+	Vec4f getColAsVec4(int index) const;
 
 	// Returns a 3x3 matrix that exclude the given row and column.
-	Mat3d get3x3Matrix(int row, int col) const;
+	Mat3f get3x3Matrix(int row, int col) const;
 
 	// Set matrix as identity.
 	void setAsIdentity();
@@ -233,40 +243,40 @@ struct Mat4d {
 	void transpose();
 
 	// Copies the data in the matrix into the given 1D array in row-major order.
-	void data(double arr[16]) const;
+	void data(float arr[16]) const;
 
 	// Copies the data in the matrix into the given 1D array in col-major order.
-	void dataColMaj(double arr[16]) const;
+	void dataColMaj(float arr[16]) const;
 
 	// Add each corresponding value of matrix a with b and store in result.
-	static void add(Mat4d &result, const Mat4d &a, const Mat4d &b);
+	static void add(Mat4f& result, const Mat4f& a, const Mat4f& b);
 
 	// Subtract each corresponding value of matrix a with b and store in result.
-	static void sub(Mat4d &result, const Mat4d &a, const Mat4d &b);
+	static void sub(Mat4f& result, const Mat4f& a, const Mat4f& b);
 
 	// Scale each value in matrix a by b and store in result.
-	static void scale(Mat4d &result, const Mat4d &a, double b);
+	static void scale(Mat4f& result, const Mat4f& a, float b);
 
 	// Multiply matrix a and b in the order (a * b) and store in result.
 	// Result cannot be the same as input b.
-	static void mult(Mat4d &result, const Mat4d &a, const Mat4d &b);
+	static void mult(Mat4f& result, const Mat4f& a, const Mat4f& b);
 
 	// Multiply matrix a and vector b in the order (a * b) and store in result.
 	// Result cannot be the same as input b.
-	static void mult(Vec4d &result, const Mat4d &a, const Vec4d &b);
+	static void mult(Vec4f& result, const Mat4f& a, const Vec4f& b);
 
 	// Calculate the inverse of matrix a and stores in result.
-	static bool inverse(Mat4d &result, const Mat4d &a);
+	static bool inverse(Mat4f& result, const Mat4f& a);
 
 	// Creates a rotation matrix and multiplies as (rotation * result).
-	static void rotate(Mat4d &result, const Vec3d &axis, double angle);
+	static void rotate(Mat4f& result, const Vec3f& axis, float angle);
 
 	// Creates a rotation matrix and multiplies as (rotation * result).
-	static void rotate(Mat4d &result, const Vec3d &axis, const Vec3d &angles);
+	static void rotate(Mat4f& result, const Vec3f& axis, const Vec3f& angles);
 
 	// Creates a translation matrix and multiplies as (translation * result).
-	static void translate(Mat4d &result, const Vec3d &translate);
+	static void translate(Mat4f& result, const Vec3f& translate);
 
 	// Creates a scale matrix and multiplies as (scale * result).
-	static void scaleVec(Mat4d &result, const Vec3d &scalar);
+	static void scaleVec(Mat4f& result, const Vec3f& scalar);
 };

@@ -20,25 +20,25 @@ constexpr int MAX_SPOT_LIGHTS = 16;
 class Renderer {
 private:
 	GLuint u_CamRendererID = 0;
-	Mat4d camLookAt;
-	Mat4d camPerspective;
+	Mat4f camLookAt;
+	Mat4f camPerspective;
 
 
 	Shader defaultShader = Shader("res/Shaders/default.shader");
 
 public:
-	Vec3d camPos = {0.f, 0.f, 5.f};
-	Vec3d camTargetDir = {0.f, 0.f, -1.f};
-	Vec3d camUp = {0.f, 1.f, 0.f};
+	Vec3f camPos = {0.f, 0.f, 5.f};
+	Vec3f camTargetDir = {0.f, 0.f, -1.f};
+	Vec3f camUp = {0.f, 1.f, 0.f};
 
 	// horizontal angle, toward -Z in rads.
 	float horizontalAngle = PI_f;
 	// vertical angle, look at the horizon in rads.
 	float verticalAngle = 0.f;
 
-	Vec3d xaxis;
-	Vec3d yaxis;
-	Vec3d zaxis;
+	Vec3f xaxis;
+	Vec3f yaxis;
+	Vec3f zaxis;
 
 	float camSpeedX = 0.0;
 	float camSpeedY = 0.0;
@@ -68,7 +68,7 @@ public:
 	void draw(const Model *model, const std::string &name);
 
 	void drawSkybox(const Cube *skybox, const std::string &name);
-	void drawLine(const Vec3d &start, const Vec3d &end, const Vec3d &colour) const;
+	void drawLine(const Vec3f& start, const Vec3f& end, const Vec3f& colour) const;
 	void drawLights();
 
 	void perspective();

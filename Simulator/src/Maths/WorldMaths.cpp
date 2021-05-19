@@ -17,48 +17,54 @@ float toDegreesf(float radians) {
 	return (radians * 180) / PI_f;
 }
 
-void Vec3d::set(double x, double y, double z) {
+Vec3f::Vec3f(float x, float y, float z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 }
 
-void Vec3d::add(Vec3d &result, const Vec3d &a, const Vec3d &b) {
+void Vec3f::set(float x, float y, float z) {
+	this->x = x;
+	this->y = y;
+	this->z = z;
+}
+
+void Vec3f::add(Vec3f& result, const Vec3f& a, const Vec3f& b) {
 	result.x = a.x + b.x;
 	result.y = a.y + b.y;
 	result.z = a.z + b.z;
 }
 
-void Vec3d::sub(Vec3d &result, const Vec3d &a, const Vec3d &b) {
+void Vec3f::sub(Vec3f& result, const Vec3f& a, const Vec3f& b) {
 	result.x = a.x - b.x;
 	result.y = a.y - b.y;
 	result.z = a.z - b.z;
 }
 
-void Vec3d::scale(Vec3d &result, const Vec3d &a, double k) {
+void Vec3f::scale(Vec3f& result, const Vec3f& a, float k) {
 	result.x = a.x * k;
 	result.y = a.y * k;
 	result.z = a.z * k;
 }
 
-void Vec3d::increment(Vec3d &result, const Vec3d &a, double k) {
+void Vec3f::increment(Vec3f& result, const Vec3f& a, float k) {
 	result.x += a.x * k;
 	result.y += a.y * k;
 	result.z += a.z * k;
 }
 
-float Vec3d::dot(const Vec3d &a, const Vec3d &b) {
+float Vec3f::dot(const Vec3f& a, const Vec3f& b) {
 	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-void Vec3d::cross(Vec3d &result, const Vec3d &a, const Vec3d &b) {
+void Vec3f::cross(Vec3f& result, const Vec3f& a, const Vec3f& b) {
 	result.x = a.y * b.z - a.z * b.y;
 	result.y = a.z * b.x - a.x * b.z;
 	result.z = a.x * b.y - a.y * b.x;
 
 }
 
-void Vec3d::normalise() {
+void Vec3f::normalise() {
 	float magnitude = lengthSquare();
 
 	if(magnitude == 0) return;
@@ -70,53 +76,53 @@ void Vec3d::normalise() {
 	z = z / magnitude;
 }
 
-void Vec3d::negate() {
-	x *= -1;
-	y *= -1;
-	z *= -1;
+void Vec3f::negate() {
+	this->x *= -1;
+	this->y *= -1;
+	this->z *= -1;
 }
 
-float Vec3d::lengthSquare() const {
+float Vec3f::lengthSquare() const {
 	return x * x + y * y + z * z;
 }
-bool Vec3d::compare(Vec3d &a) const {
+bool Vec3f::compare(Vec3f & a) const {
 	return a.x == x && a.y == y && a.z == z;
 }
 //////////////////////////////////////////////
 
-void Mat3d::setRowData(int index, const double * array) {
+void Mat3f::setRowData(int index, float * array) {
 	matrix[index][0] = array[0];
 	matrix[index][1] = array[1];
 	matrix[index][2] = array[2];
 }
 
-void Mat3d::setRowData(int index, const Vec3d &vec) {
+void Mat3f::setRowData(int index, Vec3f& vec) {
 	matrix[index][0] = vec.x;
 	matrix[index][1] = vec.y;
 	matrix[index][2] = vec.z;
 }
 
-void Mat3d::setColData(int index, const double* array) {
+void Mat3f::setColData(int index, float * array) {
 	matrix[0][index] = array[0];
 	matrix[1][index] = array[1];
 	matrix[2][index] = array[2];
 }
 
-void Mat3d::setColData(int index, const Vec3d &vec) {
+void Mat3f::setColData(int index, Vec3f& vec) {
 	matrix[0][index] = vec.x;
 	matrix[1][index] = vec.y;
 	matrix[2][index] = vec.z;
 }
 
-Vec3d Mat3d::getRowAsVec(int index) const {
-	return Vec3d(matrix[index][0], matrix[index][1], matrix[index][2]);
+Vec3f Mat3f::getRowAsVec(int index) const {
+	return Vec3f(matrix[index][0], matrix[index][1], matrix[index][2]);
 }
 
-Vec3d Mat3d::getColAsVec(int index) const {
-	return Vec3d(matrix[0][index], matrix[1][index], matrix[2][index]);
+Vec3f Mat3f::getColAsVec(int index) const {
+	return Vec3f(matrix[0][index], matrix[1][index], matrix[2][index]);
 }
 
-void Mat3d::setAsIdentity() {
+void Mat3f::setAsIdentity() {
 	matrix[0][0] = 1;
 	matrix[0][1] = 0;
 	matrix[0][2] = 0;
@@ -130,7 +136,7 @@ void Mat3d::setAsIdentity() {
 	matrix[2][2] = 1;
 }
 
-void Mat3d::setAsZero() {
+void Mat3f::setAsZero() {
 	matrix[0][0] = 0;
 	matrix[0][1] = 0;
 	matrix[0][2] = 0;
@@ -144,13 +150,13 @@ void Mat3d::setAsZero() {
 	matrix[2][2] = 0;
 }
 
-float Mat3d::determinant() const {
+float Mat3f::determinant() const {
 	return	matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[2][1] * matrix[1][2]) -
 		matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[2][0] * matrix[1][2]) +
 		matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[2][0] * matrix[1][1]);
 }
 
-void Mat3d::transpose() {
+void Mat3f::transpose() {
 	float temp = matrix[0][1];
 	matrix[0][1] = matrix[1][0];
 	matrix[1][0] = temp;
@@ -164,21 +170,21 @@ void Mat3d::transpose() {
 	matrix[2][1] = temp;
 }
 
-void Mat3d::add(Mat3d &result, const Mat3d &a, const Mat3d &b) {
+void Mat3f::add(Mat3f& result, const Mat3f& a, const Mat3f& b) {
 	result.matrix[0][0] = a.matrix[0][0] + b.matrix[0][0];
 	result.matrix[0][1] = a.matrix[0][1] + b.matrix[0][1];
 	result.matrix[0][2] = a.matrix[0][2] + b.matrix[0][2];
-								 
+		  
 	result.matrix[1][0] = a.matrix[1][0] + b.matrix[1][0];
 	result.matrix[1][1] = a.matrix[1][1] + b.matrix[1][1];
 	result.matrix[1][2] = a.matrix[1][2] + b.matrix[1][2];
-								 
+		  
 	result.matrix[2][0] = a.matrix[2][0] + b.matrix[2][0];
 	result.matrix[2][1] = a.matrix[2][1] + b.matrix[2][1];
 	result.matrix[2][2] = a.matrix[2][2] + b.matrix[2][2];
 }
 
-void Mat3d::sub(Mat3d &result, Mat3d &a, Mat3d &b) {
+void Mat3f::sub(Mat3f& result, const Mat3f& a, const Mat3f& b) {
 	result.matrix[0][0] = a.matrix[0][0] - b.matrix[0][0];
 	result.matrix[0][1] = a.matrix[0][1] - b.matrix[0][1];
 	result.matrix[0][2] = a.matrix[0][2] - b.matrix[0][2];
@@ -192,7 +198,7 @@ void Mat3d::sub(Mat3d &result, Mat3d &a, Mat3d &b) {
 	result.matrix[2][2] = a.matrix[2][2] - b.matrix[2][2];
 }
 
-void Mat3d::scale(Mat3d &result, const Mat3d &a, float b) {
+void Mat3f::scale(Mat3f& result, const Mat3f& a, float b) {
 	result.matrix[0][0] = a.matrix[0][0] * b;
 	result.matrix[0][1] = a.matrix[0][1] * b;
 	result.matrix[0][2] = a.matrix[0][2] * b;
@@ -206,7 +212,7 @@ void Mat3d::scale(Mat3d &result, const Mat3d &a, float b) {
 	result.matrix[2][2] = a.matrix[2][2] * b;
 }
 
-void Mat3d::mult(Mat3d &result, const Mat3d &a, const Mat3d &b) {
+void Mat3f::mult(Mat3f& result, const Mat3f& a, const Mat3f& b) {
 	// n^3 amount of individual multiplication n = matrix size
 	// 3*3*3 = 27 multiplications total.
 	for(int i = 0; i < 3; i++) {
@@ -218,7 +224,7 @@ void Mat3d::mult(Mat3d &result, const Mat3d &a, const Mat3d &b) {
 	}
 }
 
-void Mat3d::mult(Vec3d &result, const Mat3d &a, const Vec3d &b) {
+void Mat3f::mult(Vec3f& result, const Mat3f& a, const Vec3f& b) {
 	// n^2 amount of individual multiplication n = matrix size
 	// 3*3 = 9 multiplications total.
 	result.x = a.matrix[0][0] * b.x
@@ -234,23 +240,23 @@ void Mat3d::mult(Vec3d &result, const Mat3d &a, const Vec3d &b) {
 		+ a.matrix[2][2] * b.z;
 }
 
-bool Mat3d::inverse(Mat3d &result, const Mat3d &a) {
-	Vec3d tempVec;
-	Vec3d c1 = a.getColAsVec(0);
-	Vec3d c2 = a.getColAsVec(1);
-	Vec3d c3 = a.getColAsVec(2);
+bool Mat3f::inverse(Mat3f& result, const Mat3f& a) {
+	Vec3f tempVec;
+	Vec3f c1 = a.getColAsVec(0);
+	Vec3f c2 = a.getColAsVec(1);
+	Vec3f c3 = a.getColAsVec(2);
 
 	float det = a.determinant();
 
 	if(det == 0) return false;
 
-	Vec3d::cross(tempVec, c2, c3);
+	Vec3f::cross(tempVec, c2, c3);
 	result.setColData(0, tempVec);
 
-	Vec3d::cross(tempVec, c3, c1);
+	Vec3f::cross(tempVec, c3, c1);
 	result.setColData(1, tempVec);
 
-	Vec3d::cross(tempVec, c1, c2);
+	Vec3f::cross(tempVec, c1, c2);
 	result.setColData(2, tempVec);
 
 	result.transpose();
@@ -259,9 +265,9 @@ bool Mat3d::inverse(Mat3d &result, const Mat3d &a) {
 	return true;
 }
 
-void Mat3d::rotate(Mat3d &result, const Vec3d &axis, double angle) {
-	Mat3d rotation;
-	Mat3d copy = Mat3d(result);
+void Mat3f::rotate(Mat3f& result, const Vec3f& axis, float angle) {
+	Mat3f rotation;
+	Mat3f copy = Mat3f(result);
 
 	// Bad plaster fix TODO Switch to quaternions
 	if(angle == 90.0) angle += 0.02;
@@ -272,10 +278,10 @@ void Mat3d::rotate(Mat3d &result, const Vec3d &axis, double angle) {
 	const float s = sinf(rads);
 
 	// Each component in temp contains the axis multiplied by (1 - cos(angle)) for easier handling.
-	Vec3d norm = Vec3d(axis);
+	Vec3f norm = Vec3f(axis);
 	norm.normalise();
-	Vec3d temp = Vec3d();
-	Vec3d::scale(temp, norm, 1.f - c);
+	Vec3f temp = Vec3f();
+	Vec3f::scale(temp, norm, 1.f - c);
 
 	// Fill out rotation matrix to rotate by xyz axis at once.
 
@@ -291,61 +297,68 @@ void Mat3d::rotate(Mat3d &result, const Vec3d &axis, double angle) {
 	rotation.matrix[2][1] = norm.z * temp.y + norm.x * s;
 	rotation.matrix[2][2] = c + temp.z * norm.z;
 
-	Mat3d::mult(result, rotation, copy);
+	Mat3f::mult(result, rotation, copy);
 }
 
-void Mat3d::rotate(Mat3d &result, const Vec3d &axis, const Vec3d &angles) {
-	Vec3d x = {axis.x, 0.f, 0.f};
-	Vec3d y = {0.f, axis.y, 0.f};
-	Vec3d z = {0.f, 0.f, axis.z};
+void Mat3f::rotate(Mat3f& result, const Vec3f& axis, const Vec3f& angles) {
+	Vec3f x = {axis.x, 0.f, 0.f};
+	Vec3f y = {0.f, axis.y, 0.f};
+	Vec3f z = {0.f, 0.f, axis.z};
 
-	Mat3d::rotate(result, x, angles.x);
-	Mat3d::rotate(result, y, angles.y);
-	Mat3d::rotate(result, z, angles.z);
+	Mat3f::rotate(result, x, angles.x);
+	Mat3f::rotate(result, y, angles.y);
+	Mat3f::rotate(result, z, angles.z);
 }
 
 ///////////////////////////////////////////////////
 
-void Vec4d::set(double x, double y, double z, double w) {
+Vec4f::Vec4f(float x, float y, float z, float w) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 	this->w = w;
 }
 
-void Vec4d::add(Vec4d &result, const Vec4d &a, const Vec4d &b) {
+void Vec4f::set(float x, float y, float z, float w) {
+	this->x = x;
+	this->y = y;
+	this->z = z;
+	this->w = w;
+}
+
+void Vec4f::add(Vec4f& result, const Vec4f& a, const Vec4f& b) {
 	result.x = a.x + b.x;
 	result.y = a.y + b.y;
 	result.z = a.z + b.z;
 	result.w = a.w + b.w;
 }
 
-void Vec4d::sub(Vec4d &result, const Vec4d &a, const Vec4d &b) {
+void Vec4f::sub(Vec4f& result, const Vec4f& a, const Vec4f& b) {
 	result.x = a.x - b.x;
 	result.y = a.y - b.y;
 	result.z = a.z - b.z;
 	result.w = a.w - b.w;
 }
 
-void Vec4d::scale(Vec4d &result, const Vec4d &a, float k) {
+void Vec4f::scale(Vec4f& result, const Vec4f& a, float k) {
 	result.x = a.x * k;
 	result.y = a.y * k;
 	result.z = a.z * k;
 	result.w = a.w * k;
 }
 
-void Vec4d::increment(Vec4d &result, const Vec4d &a, float k) {
+void Vec4f::increment(Vec4f& result, const Vec4f& a, float k) {
 	result.x += a.x * k;
 	result.y += a.y * k;
 	result.z += a.z * k;
 	result.w += a.w * k;
 }
 
-float Vec4d::dot(const Vec4d &a, const Vec4d &b) {
+float Vec4f::dot(const Vec4f& a, const Vec4f& b) {
 	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-void Vec4d::normalise() {
+void Vec4f::normalise() {
 	float magnitude = lengthSquare();
 
 	if(magnitude == 0) return;
@@ -358,82 +371,82 @@ void Vec4d::normalise() {
 	w = w / magnitude;
 }
 
-void Vec4d::negate() {
-	x *= -1;
-	y *= -1;
-	z *= -1;
-	w *= -1;
+void Vec4f::negate() {
+	this->x *= -1;
+	this->y *= -1;
+	this->z *= -1;
+	this->w *= -1;
 }
 
-float Vec4d::lengthSquare() const {
+float Vec4f::lengthSquare() const {
 	return x * x + y * y + z * z + w * w;
 }
 
-bool Vec4d::compare(const Vec4d &a) const {
+bool Vec4f::compare(Vec4f & a) const {
 	return a.x == x && a.y == y && a.z == z && a.w == w;
 }
 
 //////////////////////////////////
 
-void Mat4d::setRowData(int index, const double * array) {
+void Mat4f::setRowData(int index, float * array) {
 	matrix[index][0] = array[0];
 	matrix[index][1] = array[1];
 	matrix[index][2] = array[2];
 	matrix[index][3] = array[3];
 }
 
-void Mat4d::setRowData(int index, const Vec4d &vec) {
+void Mat4f::setRowData(int index, const Vec4f& vec) {
 	matrix[index][0] = vec.x;
 	matrix[index][1] = vec.y;
 	matrix[index][2] = vec.z;
 	matrix[index][3] = vec.w;
 }
 
-void Mat4d::setRowData(int index, const Vec3d &vec) {
+void Mat4f::setRowData(int index, const Vec3f& vec) {
 	matrix[index][0] = vec.x;
 	matrix[index][1] = vec.y;
 	matrix[index][2] = vec.z;
 }
 
-void Mat4d::setColData(int index, const double * array) {
+void Mat4f::setColData(int index, float * array) {
 	matrix[0][index] = array[0];
 	matrix[1][index] = array[1];
 	matrix[2][index] = array[2];
 	matrix[2][index] = array[3];
 }
 
-void Mat4d::setColData(int index, const Vec4d &vec) {
+void Mat4f::setColData(int index, const Vec4f& vec) {
 	matrix[0][index] = vec.x;
 	matrix[1][index] = vec.y;
 	matrix[2][index] = vec.z;
 	matrix[3][index] = vec.w;
 }
 
-void Mat4d::setColData(int index, const Vec3d &vec) {
+void Mat4f::setColData(int index, const Vec3f& vec) {
 	matrix[0][index] = vec.x;
 	matrix[1][index] = vec.y;
 	matrix[2][index] = vec.z;
 }
 
-Vec3d Mat4d::getRowAsVec3(int index) const {
-	return Vec3d(matrix[index][0], matrix[index][1], matrix[index][2]);
+Vec3f Mat4f::getRowAsVec3(int index) const {
+	return Vec3f(matrix[index][0], matrix[index][1], matrix[index][2]);
 }
 
-Vec4d Mat4d::getRowAsVec4(int index) const {
-	return Vec4d(matrix[index][0], matrix[index][1], matrix[index][2], matrix[index][3]);
+Vec4f Mat4f::getRowAsVec4(int index) const {
+	return Vec4f(matrix[index][0], matrix[index][1], matrix[index][2], matrix[index][3]);
 }
 
-Vec3d Mat4d::getColAsVec3(int index) const {
-	return Vec3d(matrix[0][index], matrix[1][index], matrix[2][index]);
+Vec3f Mat4f::getColAsVec3(int index) const {
+	return Vec3f(matrix[0][index], matrix[1][index], matrix[2][index]);
 }
 
-Vec4d Mat4d::getColAsVec4(int index) const {
-	return Vec4d(matrix[0][index], matrix[1][index], matrix[2][index], matrix[3][index]);
+Vec4f Mat4f::getColAsVec4(int index) const {
+	return Vec4f(matrix[0][index], matrix[1][index], matrix[2][index], matrix[3][index]);
 }
 
-Mat3d Mat4d::get3x3Matrix(int row, int col) const {
-	Mat3d mat;
-	double arr[3];
+Mat3f Mat4f::get3x3Matrix(int row, int col) const {
+	Mat3f mat;
+	float arr[3];
 	int count = 0;
 	int row3x3 = 0;
 
@@ -454,7 +467,7 @@ Mat3d Mat4d::get3x3Matrix(int row, int col) const {
 	return mat;
 }
 
-void Mat4d::setAsIdentity() {
+void Mat4f::setAsIdentity() {
 	matrix[0][0] = 1;
 	matrix[0][1] = 0;
 	matrix[0][2] = 0;
@@ -476,7 +489,7 @@ void Mat4d::setAsIdentity() {
 	matrix[3][3] = 1;
 }
 
-void Mat4d::setAsZero() {
+void Mat4f::setAsZero() {
 	matrix[0][0] = 0;
 	matrix[0][1] = 0;
 	matrix[0][2] = 0;
@@ -498,11 +511,11 @@ void Mat4d::setAsZero() {
 	matrix[3][3] = 0;
 }
 
-float Mat4d::determinant() const {
-	Mat3d mat1 = get3x3Matrix(0, 0);
-	Mat3d mat2 = get3x3Matrix(0, 1);
-	Mat3d mat3 = get3x3Matrix(0, 2);
-	Mat3d mat4 = get3x3Matrix(0, 3);
+float Mat4f::determinant() const {
+	Mat3f mat1 = get3x3Matrix(0, 0);
+	Mat3f mat2 = get3x3Matrix(0, 1);
+	Mat3f mat3 = get3x3Matrix(0, 2);
+	Mat3f mat4 = get3x3Matrix(0, 3);
 
 	float det1 = mat1.determinant();
 	float det2 = mat2.determinant();
@@ -512,7 +525,7 @@ float Mat4d::determinant() const {
 	return matrix[0][0] * det1 - matrix[0][1] * det2 + matrix[0][2] * det3 - matrix[0][3] * det4;
 }
 
-void Mat4d::transpose() {
+void Mat4f::transpose() {
 	float temp = matrix[0][1];
 	matrix[0][1] = matrix[1][0];
 	matrix[1][0] = temp;
@@ -538,14 +551,14 @@ void Mat4d::transpose() {
 	matrix[3][2] = temp;
 }
 
-void Mat4d::data(double arr[16]) const {
+void Mat4f::data(float arr[16]) const {
 
 	for(int i = 0; i < 16; i++) {
 		arr[i] = matrix[i / 4][i % 4];
 	}
 }
 
-void Mat4d::dataColMaj(double arr[16]) const {
+void Mat4f::dataColMaj(float arr[16]) const {
 
 	for(int i = 0; i < 16; i++) {
 		arr[i] = matrix[i % 4][i / 4];
@@ -553,7 +566,7 @@ void Mat4d::dataColMaj(double arr[16]) const {
 
 }
 
-void Mat4d::add(Mat4d &result, const Mat4d &a, const Mat4d &b) {
+void Mat4f::add(Mat4f& result, const Mat4f& a, const Mat4f& b) {
 	result.matrix[0][0] = a.matrix[0][0] + b.matrix[0][0];
 	result.matrix[0][1] = a.matrix[0][1] + b.matrix[0][1];
 	result.matrix[0][2] = a.matrix[0][2] + b.matrix[0][2];
@@ -576,7 +589,7 @@ void Mat4d::add(Mat4d &result, const Mat4d &a, const Mat4d &b) {
 
 }
 
-void Mat4d::sub(Mat4d &result, const Mat4d &a, const Mat4d &b) {
+void Mat4f::sub(Mat4f& result, const Mat4f& a, const Mat4f& b) {
 	result.matrix[0][0] = a.matrix[0][0] - b.matrix[0][0];
 	result.matrix[0][1] = a.matrix[0][1] - b.matrix[0][1];
 	result.matrix[0][2] = a.matrix[0][2] - b.matrix[0][2];
@@ -598,7 +611,7 @@ void Mat4d::sub(Mat4d &result, const Mat4d &a, const Mat4d &b) {
 	result.matrix[3][3] = a.matrix[3][3] - b.matrix[3][3];
 }
 
-void Mat4d::scale(Mat4d &result, const Mat4d &a, double b) {
+void Mat4f::scale(Mat4f& result, const Mat4f& a, float b) {
 	result.matrix[0][0] = a.matrix[0][0] * b;
 	result.matrix[0][1] = a.matrix[0][1] * b;
 	result.matrix[0][2] = a.matrix[0][2] * b;
@@ -620,7 +633,7 @@ void Mat4d::scale(Mat4d &result, const Mat4d &a, double b) {
 	result.matrix[3][3] = a.matrix[3][3] * b;
 }
 
-void Mat4d::mult(Mat4d &result, const Mat4d &a, const Mat4d &b) {
+void Mat4f::mult(Mat4f& result, const Mat4f& a, const Mat4f& b) {
 	// n^3 amount of individual multiplication n = matrix size
 	// 4*4*4 = 64 multiplications total.
 	for(int i = 0; i < 4; i++) {
@@ -633,7 +646,7 @@ void Mat4d::mult(Mat4d &result, const Mat4d &a, const Mat4d &b) {
 	}
 }
 
-void Mat4d::mult(Vec4d &result, const Mat4d &a, const Vec4d &b) {
+void Mat4f::mult(Vec4f& result, const Mat4f& a, const Vec4f& b) {
 	// n^2 amount of individual multiplication n = matrix size
 	// 4*4 = 16 multiplications total.
 	result.x = a.matrix[0][0] * b.x
@@ -657,7 +670,7 @@ void Mat4d::mult(Vec4d &result, const Mat4d &a, const Vec4d &b) {
 		+ a.matrix[3][3] * b.w;
 }
 
-bool Mat4d::inverse(Mat4d &result, const Mat4d &a) {
+bool Mat4f::inverse(Mat4f& result, const Mat4f& a) {
 	result.matrix[0][0] = a.matrix[1][1] * a.matrix[2][2] * a.matrix[3][3] -
 		a.matrix[1][1] * a.matrix[2][3] * a.matrix[3][2] -
 		a.matrix[2][1] * a.matrix[1][2] * a.matrix[3][3] +
@@ -788,9 +801,9 @@ bool Mat4d::inverse(Mat4d &result, const Mat4d &a) {
 
 // https://learnopengl.com/Getting-started/Transformations
 
-void Mat4d::rotate(Mat4d &result, const Vec3d &axis, double angle) {
-	Mat4d rotation;
-	Mat4d copy = Mat4d(result);
+void Mat4f::rotate(Mat4f& result, const Vec3f& axis, float angle) {
+	Mat4f rotation;
+	Mat4f copy = Mat4f(result);
 
 	// Bad plaster fix TODO Switch to quaternions
 	if(angle == 90.0) angle += 0.02;
@@ -801,10 +814,10 @@ void Mat4d::rotate(Mat4d &result, const Vec3d &axis, double angle) {
 	const float s = sinf(rads);
 
 	// Each component in temp contains the axis multiplied by (1 - cos(angle)) for easier handling.
-	Vec3d norm = Vec3d(axis);
+	Vec3f norm = Vec3f(axis);
 	norm.normalise();
-	Vec3d temp = Vec3d();
-	Vec3d::scale(temp, norm, 1.f - c);
+	Vec3f temp = Vec3f();
+	Vec3f::scale(temp, norm, 1.f - c);
 
 	// Fill out rotation matrix to rotate by xyz axis at once.
 
@@ -820,36 +833,36 @@ void Mat4d::rotate(Mat4d &result, const Vec3d &axis, double angle) {
 	rotation.matrix[2][1] = norm.z * temp.y + norm.x * s;
 	rotation.matrix[2][2] = c + temp.z * norm.z;
 
-	Mat4d::mult(result, rotation, copy);
+	Mat4f::mult(result, rotation, copy);
 }
 
-void Mat4d::rotate(Mat4d &result, const Vec3d &axis, const Vec3d &angles) {
-	Vec3d x = {axis.x, 0.f, 0.f};
-	Vec3d y = {0.f, axis.y, 0.f};
-	Vec3d z = {0.f, 0.f, axis.z};
+void Mat4f::rotate(Mat4f& result, const Vec3f& axis, const Vec3f& angles) {
+	Vec3f x = {axis.x, 0.f, 0.f};
+	Vec3f y = {0.f, axis.y, 0.f};
+	Vec3f z = {0.f, 0.f, axis.z};
 
-	Mat4d::rotate(result, x, angles.x);
-	Mat4d::rotate(result, y, angles.y);
-	Mat4d::rotate(result, z, angles.z);
+	Mat4f::rotate(result, x, angles.x);
+	Mat4f::rotate(result, y, angles.y);
+	Mat4f::rotate(result, z, angles.z);
 }
 
-void Mat4d::translate(Mat4d &result, const Vec3d &translate) {
-	Mat4d translation;
-	Mat4d copy = Mat4d(result);
+void Mat4f::translate(Mat4f& result, const Vec3f& translate) {
+	Mat4f translation;
+	Mat4f copy = Mat4f(result);
 	translation.matrix[0][3] = translate.x;
 	translation.matrix[1][3] = translate.y;
 	translation.matrix[2][3] = translate.z;
 
-	Mat4d::mult(result, translation, copy);
+	Mat4f::mult(result, translation, copy);
 }
 
-void Mat4d::scaleVec(Mat4d &result, const Vec3d &scalar) {
-	Mat4d scale;
-	Mat4d copy = Mat4d(result);
+void Mat4f::scaleVec(Mat4f& result, const Vec3f& scalar) {
+	Mat4f scale;
+	Mat4f copy = Mat4f(result);
 	scale.matrix[0][0] = scalar.x;
 	scale.matrix[1][1] = scalar.y;
 	scale.matrix[2][2] = scalar.z;
 
-	Mat4d::mult(result, scale, copy);
+	Mat4f::mult(result, scale, copy);
 }
 

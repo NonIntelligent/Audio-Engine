@@ -103,7 +103,7 @@ void Renderer::drawSkybox(const Cube * skybox, const std::string & name) {
 	glDepthFunc(GL_LESS); // Reset depth func back to normal
 }
 
-void Renderer::drawLine(const Vec3d &start, const Vec3d &end, const Vec3d &colour) const {
+void Renderer::drawLine(const Vec3f& start, const Vec3f& end, const Vec3f& colour) const {
 	float line[] = {
 		start.x, start.y, start.z,
 		end.x, end.y, end.z
@@ -169,25 +169,25 @@ void Renderer::perspective() {
 }
 
 void Renderer::lookAt() {
-	Vec3d xAxis;
-	Vec3d zAxis;
-	Vec3d yAxis;
-	Vec3d dotPos;
+	Vec3f xAxis;
+	Vec3f zAxis;
+	Vec3f yAxis;
+	Vec3f dotPos;
 
 	zAxis = camTargetDir;
 	zAxis.negate();
 	zAxis.normalise();
-	Vec3d::cross(xAxis, camUp, zAxis);
+	Vec3f::cross(xAxis, camUp, zAxis);
 	xAxis.normalise();
-	Vec3d::cross(yAxis, zAxis, xAxis);
+	Vec3f::cross(yAxis, zAxis, xAxis);
 
 	xaxis = xAxis;
 	yaxis = yAxis;
 	zaxis = zAxis;
 
-	dotPos.x = -Vec3d::dot(xAxis, camPos);
-	dotPos.y = -Vec3d::dot(yAxis, camPos);
-	dotPos.z = -Vec3d::dot(zAxis, camPos);
+	dotPos.x = -Vec3f::dot(xAxis, camPos);
+	dotPos.y = -Vec3f::dot(yAxis, camPos);
+	dotPos.z = -Vec3f::dot(zAxis, camPos);
 
 	camLookAt.setColData(0, xAxis);
 	camLookAt.setColData(1, yAxis);
@@ -198,15 +198,15 @@ void Renderer::lookAt() {
 
 void Renderer::update(const double & dt) {
 	// Moves camera based on direction.
-	Vec3d distance;
-	Vec3d::scale(distance, xaxis, camSpeedX * dt);
-	Vec3d::add(camPos, camPos, distance);
+	Vec3f distance;
+	Vec3f::scale(distance, xaxis, camSpeedX * dt);
+	Vec3f::add(camPos, camPos, distance);
 
-	Vec3d::scale(distance, {0.0, 1.0, 0.0}, camSpeedY * dt);
-	Vec3d::add(camPos, camPos, distance);
+	Vec3f::scale(distance, {0.0, 1.0, 0.0}, camSpeedY * dt);
+	Vec3f::add(camPos, camPos, distance);
 
-	Vec3d::scale(distance, zaxis, camSpeedZ * dt);
-	Vec3d::add(camPos, camPos, distance);
+	Vec3f::scale(distance, zaxis, camSpeedZ * dt);
+	Vec3f::add(camPos, camPos, distance);
 
 	// Update lighting.
 	//updateLights(dt);
@@ -214,7 +214,7 @@ void Renderer::update(const double & dt) {
 
 void Renderer::updateCameraState(double deltaX, double deltaY, float multiplier) {
 
-	Vec3d direction;
+	Vec3f direction;
 
 	// Convert screen space offset to clip space.
 	double clipX = deltaX / viewport[0];
@@ -248,23 +248,15 @@ void Renderer::updateCameraState(double deltaX, double deltaY, float multiplier)
 
 void Renderer::updateCameraUniform() {
 	// Fill the buffer data
-	double data[16];
+	float data[16];
 	camPerspective.data(data);
-	float convert[16];
-
-	for(int i = 0; i < 16; i++) {
-		convert[i] = (float)data[i];
-	}
 
 	GLCall(glBindBuffer(GL_UNIFORM_BUFFER, u_CamRendererID));
 
-	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), convert));
+	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 0, 16 * sizeof(float), data));
 	camLookAt.data(data);
-	for(int i = 0; i < 16; i++) {
-		convert[i] = (float)data[i];
-	}
 
-	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(float), 16 * sizeof(float), convert));
+	GLCall(glBufferSubData(GL_UNIFORM_BUFFER, 16 * sizeof(float), 16 * sizeof(float), data));
 
 	float pos[]{camPos.x, camPos.y, camPos.z};
 

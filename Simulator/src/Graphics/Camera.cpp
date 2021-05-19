@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include <math.h>
 
-Mat4d Camera::perspective() {
+Mat4f Camera::perspective() {
 	float fn = far + near;
 	float deltaPlane = far - near;
 	float aspectRatio = viewport[0] / viewport[1];
@@ -9,7 +9,10 @@ Mat4d Camera::perspective() {
 	
 	// http://www.songho.ca/opengl/gl_projectionmatrix.html
 
-	Mat4d frustrum;
+	Vec3f xyz;
+	Vec3f::add(xyz, xyz, xyz);
+
+	Mat4f frustrum;
 	frustrum.setAsZero();
 	frustrum.matrix[0][0] = 1.f / (aspectRatio * t);
 	frustrum.matrix[1][1] = 1.f / t;
@@ -20,29 +23,29 @@ Mat4d Camera::perspective() {
 	return frustrum;
 }
 
-Mat4d Camera::lookAt() {
-	Mat4d view;
+Mat4f Camera::lookAt() {
+	Mat4f view;
 
-	//Vec3d eye; Vec3d::add(&eye, &pos, &target);
-	Vec3d camRight;
-	Vec3d camDirection;
-	Vec3d camUp;
-	Vec3d dotPos;
+	//Vec3 eye; Vec3::add(&eye, &pos, &target);
+	Vec3f camRight;
+	Vec3f camDirection;
+	Vec3f camUp;
+	Vec3f dotPos;
 
-	Vec3d::sub(camDirection, pos, target);
+	Vec3f::sub(camDirection, pos, target);
 	camDirection.normalise();
-	Vec3d::cross(camRight, up, camDirection);
+	Vec3f::cross(camRight, up, camDirection);
 	camRight.normalise();
-	Vec3d::cross(camUp, camDirection, camRight);
+	Vec3f::cross(camUp, camDirection, camRight);
 
-	dotPos.x = -Vec3d::dot(camRight, pos);
-	dotPos.y = -Vec3d::dot(camUp, pos);
-	dotPos.z =  Vec3d::dot(camDirection, pos);
+	dotPos.x = -Vec3f::dot(camRight, pos);
+	dotPos.y = -Vec3f::dot(camUp, pos);
+	dotPos.z =  Vec3f::dot(camDirection, pos);
 
 	view.setAsIdentity();
 	view.setRowData(0, camRight);
 	view.setRowData(1, camUp);
-	view.setRowData(2, Vec3d{-camDirection.x, -camDirection.y, -camDirection.z});
+	view.setRowData(2, Vec3f{-camDirection.x, -camDirection.y, -camDirection.z});
 	view.setColData(3, dotPos);
 
 

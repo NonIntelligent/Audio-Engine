@@ -119,24 +119,19 @@ void Shader::setUniform1f(const std::string & name, float value) {
 	GLCall(glUniform1f(getUniformLocation(name), value));
 }
 
-void Shader::setUniform3f(const std::string & name, Vec3d floats) {
+void Shader::setUniform3f(const std::string & name, Vec3f floats) {
 	GLCall(glUniform3f(getUniformLocation(name), floats.x, floats.y, floats.z));
 }
 
-void Shader::setUniform4f(const std::string & name, Vec4d floats) {
+void Shader::setUniform4f(const std::string & name, Vec4f floats) {
 	GLCall(glUniform4f(getUniformLocation(name), floats.x, floats.y, floats.z, floats.w));
 }
 
-void Shader::setUniformMatrix4fv(const std::string & name, GLsizei count, GLboolean transpose, Mat4d matrix) {
-	double data[16];
+void Shader::setUniformMatrix4fv(const std::string & name, GLsizei count, GLboolean transpose, Mat4f matrix) {
+	float data[16];
 	matrix.data(data);
-	float convert[16];
 
-	for(int i = 0; i < 16; i++) {
-		convert[i] = (float)data[i];
-	}
-
-	GLCall(glUniformMatrix4fv(getUniformLocation(name), count, transpose, convert));
+	GLCall(glUniformMatrix4fv(getUniformLocation(name), count, transpose, data));
 }
 
 void Shader::setUniformBlock(const std::string &blockName, GLuint blockBindingPt) {

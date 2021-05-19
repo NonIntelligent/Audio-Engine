@@ -2,9 +2,9 @@
 #include "Maths/WorldMaths.h"
 
 struct Camera {
-	Vec3d pos = {0.0, 0.0, 5.0};
-	Vec3d target = {0.0, 0.0, -1.0};
-	Vec3d up = {0.0, 1.0, 0.0};
+	Vec3f pos = {0.0, 0.0, 5.0};
+	Vec3f target = {0.0, 0.0, -1.0};
+	Vec3f up = {0.0, 1.0, 0.0};
 
 	double fov_y = 90.0;
 	float viewport[2] = {1280, 720};
@@ -14,8 +14,8 @@ struct Camera {
 	Camera() {	};
 	~Camera() {	};
 
-	Mat4d perspective();
-	Mat4d lookAt();
+	Mat4f perspective();
+	Mat4f lookAt();
 
 	void setPos(double x, double y, double z);
 	void setTarget();
