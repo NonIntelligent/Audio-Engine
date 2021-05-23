@@ -1,5 +1,10 @@
-#include "AudioReader.h"
 #include "pch.h"
+
+#include "includes/AudioReader.h"
+
+void TesterLib::helpme() {
+	printf("Manz need help");
+}
 
 namespace Banshee {
 
@@ -7,3 +12,4 @@ namespace Banshee {
 		printf("Aloha!");
 	}
 };
+

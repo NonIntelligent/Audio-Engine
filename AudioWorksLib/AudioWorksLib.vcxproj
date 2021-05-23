@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AudioReader.h" />
+    <ClInclude Include="src\includes\AudioReader.h" />
     <ClInclude Include="src\Bitmaths.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
